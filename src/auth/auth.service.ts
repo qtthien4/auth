@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
@@ -59,5 +63,19 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.email);
     await this.usersService.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
+  }
+
+  async loginWithGoogle(user) {
+    if (!user) {
+      throw new BadRequestException('Unauthenticated');
+    }
+
+    const userExists = await this.usersService.findByEmail(user.email);
+
+    if (!userExists) {
+      return this.register(user);
+    }
+
+    return this.login(userExists);
   }
 }
