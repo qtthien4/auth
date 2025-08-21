@@ -7,7 +7,6 @@ import {
   Get,
   Req,
   Res,
-  HttpStatus,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -44,7 +43,6 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOauthGuard)
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   async auth() {}
 
   @Get('google/callback')
